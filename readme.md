@@ -55,13 +55,13 @@
 
 <!-- A documentação de referência da API no formato Swagger poderá ser encontrada através desse [link](https://app.swaggerhub.com/apis-docs/Manfrinmm/VUTTR-API/1.0) -->
 
-<!-- <div align="center" >
+<div align="center" >
 
-[![Run in Insomnia](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Tech-Learning &uri=https://github.com/Manfrinmm/projeto-daw-tech-learning/docs/Template insomnia de requisições.json)
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Tech%20Learning&uri=https%3A%2F%2Fgithub.com%2FManfrinmm%2Fprojeto-daw-tech-learning%2Fblob%2Fmaster%2Fdocs%2FTemplate%2520insomnia%2520de%2520requisi%25C3%25A7%25C3%25B5es.json)
 
 Para utilizar documentação de referência no insomnia basta clicar no batão acima
 
-</div> -->
+</div>
 
 # 🚀 Tecnologias usadas
 
