@@ -9,6 +9,7 @@ import com.techlearning.backend.dtos.CourseDTO;
 import com.techlearning.backend.dtos.InstructorDTO;
 import com.techlearning.backend.dtos.StudentDTO;
 import com.techlearning.backend.dtos.SubscriptionDTO;
+import com.techlearning.backend.exceptionHandler.BusinessException;
 import com.techlearning.backend.models.Course;
 import com.techlearning.backend.models.Instructor;
 import com.techlearning.backend.models.Student;
@@ -51,4 +52,13 @@ public class SubscriptionService {
 			
 		return new SubscriptionDTO(subscriptionRepository.save(new StudentCourse(subscription.getId(), student, course)));			
 	}
+	
+	@Transactional
+	public void deleteSubscription(Integer id) {
+		StudentCourse subscription = subscriptionRepository.findById(id).orElseThrow(() -> new BusinessException("Inscrição não encontrada!"));
+		
+		subscriptionRepository.delete(subscription);
+	}
+	
+	
 }

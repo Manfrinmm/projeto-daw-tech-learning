@@ -7,8 +7,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.springframework.hateoas.RepresentationModel;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.techlearning.backend.models.Student;
@@ -52,6 +50,6 @@ public class StudentDTO implements Serializable {
 		this.id = student.getId();
 		this.name = student.getName();
 		this.email = student.getEmail();
-		this.courses = student.getCourses();
+		//this.courses = student.getCourses();
 	}
 }

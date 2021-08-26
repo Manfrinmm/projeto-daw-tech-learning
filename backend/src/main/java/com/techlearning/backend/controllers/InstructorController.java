@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techlearning.backend.dtos.InstructorDTO;
-import com.techlearning.backend.dtos.StudentDTO;
-import com.techlearning.backend.models.Instructor;
 import com.techlearning.backend.services.InstructorService;
-import com.techlearning.backend.services.StudentService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -29,6 +26,12 @@ public class InstructorController {
 	@Autowired
 	private InstructorService instructorService;
 		
+	@GetMapping
+	public ResponseEntity<Page<InstructorDTO>> index(Pageable pageable) {
+		Page<InstructorDTO> instructors = instructorService.findAll(pageable);
+		
+		return ResponseEntity.ok(instructors);
+	}
 	
 	@Operation(summary = "Create instructor")
 	@PostMapping
@@ -37,34 +40,27 @@ public class InstructorController {
 		
 		return ResponseEntity.created(null).body(instructor);
 	}
-	/*
-	@GetMapping
-	public ResponseEntity<Page<StudentDTO>> index(Pageable pageable) {
-		Page<StudentDTO> users = instructorService.findAll(pageable);
-		
-		return ResponseEntity.ok(users);
-	}
-	
-	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<StudentDTO> show(@PathVariable Integer id) {
-		StudentDTO studentDTO = instructorService.findById(id);
+	public ResponseEntity<InstructorDTO> show(@PathVariable Integer id) {
+		InstructorDTO studentDTO = instructorService.getInstructorById(id);
 		
 		return ResponseEntity.ok(studentDTO); 
 	}
 	
-	@PutMapping
-	public ResponseEntity<StudentDTO> update(@RequestBody StudentDTO objBody) {
-		StudentDTO objDTO = studentService.update(objBody);
+	@PutMapping("/{id}")
+	public ResponseEntity<InstructorDTO> update(@PathVariable Integer id, @Valid @RequestBody InstructorDTO instructorBody) {
+		instructorBody.setId(id);
 		
-		return ResponseEntity.ok(objDTO);
+		InstructorDTO instructorDTO = instructorService.update(instructorBody);
+		
+		return ResponseEntity.ok(instructorDTO);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity delete(@PathVariable Integer id) {
-		studentService.deleteStudent(id);
+		instructorService.delete(id);
 		
 		return ResponseEntity.noContent().build(); 
-	}*/
+	}
 }

@@ -2,13 +2,16 @@ package com.techlearning.backend.dtos;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.Email;
+import javax.persistence.JoinColumn;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
+import javax.websocket.server.PathParam;
+
+import org.hibernate.validator.constraints.Range;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.techlearning.backend.models.Instructor;
+import com.techlearning.backend.models.Lesson;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,30 +25,26 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class InstructorDTO implements Serializable {
+public class LessonDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EqualsAndHashCode.Include
-	private Integer id ;
+	private Integer id;
 
 	@NotBlank
 	private String name;
 	
 	@NotBlank
-	@Size(min = 11, max = 11)
-	private String cpf;
+	private String video;
 	
-	@NotBlank
-	@Email
-	private String email;
+	private Integer course_id;
 	
-	//private List<Course> courses;
+	private CourseDTO course;
 	
-	public InstructorDTO (Instructor instructor) {
-		this.id = instructor.getId();
-		this.name = instructor.getName();
-		this.cpf = instructor.getCpf();
-		this.email = instructor.getEmail();
-		//this.courses = instructor.getCourses();
+	public LessonDTO (Lesson lesson) {
+		this.id = lesson.getId();
+		this.name = lesson.getName();
+		this.video = lesson.getVideo();
+		this.course = new CourseDTO(lesson.getCourse());
 	}
 }
