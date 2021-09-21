@@ -1,18 +1,18 @@
-/* eslint-disable react/style-prop-object */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import { Player, Controls } from "@lottiefiles/react-lottie-player";
+import { Player } from "@lottiefiles/react-lottie-player";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
+import * as Yup from "yup";
 
 import Button from "../../../components/Button";
 import Input from "../../../components/Form/Input";
 import Select from "../../../components/Form/Select";
 import Textarea from "../../../components/Form/Textarea";
 import api from "../../../services/api";
+import getValidationErrors from "../../../utils/getValidationErrors";
 import { Container } from "./styles";
 
 interface IInstructors {
@@ -40,10 +40,6 @@ export default function Course() {
 
     if (course_id) {
       api.get(`/courses/${course_id}`).then(response => {
-        // setInstructors(response.data.content);
-
-        console.log(response.data);
-
         formRef.current?.setData({
           ...response.data,
           instructor_id: response.data.instructor.id,
@@ -52,34 +48,66 @@ export default function Course() {
     }
   }, [course_id]);
 
+  const handleGoBack = useCallback(() => {
+    history.goBack();
+  }, [history]);
+
   const handleSubmit = useCallback(
     async data => {
-      console.log(data);
+      const schema = Yup.object().shape({
+        name: Yup.string().required("Campo nome é obrigatório"),
+        description: Yup.string().required("Campo descrição é obrigatório"),
+        thumbnail: Yup.string().required("Campo thumbnail é obrigatório"),
+        instructor_id: Yup.number().min(1, "Campo de instrutor é obrigatório"),
+      });
 
-      if (course_id) {
-        const response = await api.put(`/courses/${course_id}`, data);
+      formRef.current?.setErrors({});
 
-        console.log(response.data);
-      } else {
-        const response = await api.post("/courses", data);
-        console.log(response.data);
+      try {
+        await schema.validate(
+          { ...data, instructor_id: Number(data.instructor_id) || 0 },
+          { abortEarly: false },
+        );
+
+        if (course_id) {
+          await api.put(`/courses/${course_id}`, data);
+
+          toast.success("Curso atualizado com sucesso!");
+        } else {
+          await api.post("/courses", data);
+
+          toast.success("Curso criado com sucesso!");
+
+          formRef.current?.reset();
+        }
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        toast.error(
+          `Falha ao ${
+            course_id ? "atualizar" : "criar"
+          } curso. Favor, tente novamente!`,
+        );
       }
     },
     [course_id],
   );
 
-  const handleGoBack = useCallback(() => {
-    history.goBack();
-  }, [history]);
-
   const handleDeleteCourse = useCallback(async () => {
     try {
       await api.delete(`/courses/${course_id}`);
 
-      console.log("curso deletado");
+      toast.warning("Curso deletado!");
+
       history.goBack();
     } catch (error) {
-      console.log("Erro ao deletar");
+      toast.error("Falha ao deletar curso. Favor, tente novamente!");
     }
   }, [history, course_id]);
 
@@ -92,7 +120,7 @@ export default function Course() {
       <Player
         src="https://assets3.lottiefiles.com/packages/lf20_dNPIoR.json"
         background="transparent"
-        // speed="1"
+        speed={1}
         style={{ height: "200px", width: "400px" }}
         loop
         controls
@@ -119,27 +147,12 @@ export default function Course() {
             label: instructor.name,
           }))}
         />
-        {/* <div className="form-floating mb-3">
-          <select
-            className="form-select"
-            // size={3}
-            aria-label="size 3 select example"
-          >
-            <option selected hidden>
-              Selecione um instrutor
-            </option>
-            {instructors.map(instructor => (
-              <option key={instructor.id} value={instructor.id}>
-                {instructor.name}
-              </option>
-            ))}
-          </select>
-        </div> */}
 
         <Button type="submit"> {course_id ? "Atualizar" : "Cadastrar"}</Button>
 
         {course_id && (
           <Button
+            type="button"
             style={{ background: "#082032" }}
             onClick={handleDeleteCourse}
           >

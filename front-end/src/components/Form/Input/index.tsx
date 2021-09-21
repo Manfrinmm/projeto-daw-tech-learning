@@ -22,7 +22,7 @@ const Input: React.FC<IInputProps> = ({ name, label, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-    <Container>
+    <Container isErrored={!!error}>
       <label htmlFor={fieldName}>{label}</label>
       <input
         id={fieldName}
@@ -33,7 +33,6 @@ const Input: React.FC<IInputProps> = ({ name, label, ...rest }) => {
       />
 
       {error && <span>{error}</span>}
-      {/* {error && <span className="invalid-feedback">{error}</span>} */}
     </Container>
   );
 };

@@ -22,7 +22,7 @@ const Textarea: React.FC<ITextareaProps> = ({ name, label, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-    <Container>
+    <Container isErrored={!!error}>
       <label htmlFor={fieldName}>{label}</label>
       <textarea
         id={fieldName}
@@ -32,8 +32,7 @@ const Textarea: React.FC<ITextareaProps> = ({ name, label, ...rest }) => {
         {...rest}
       />
 
-      {/* {error && <span>{error}</span>} */}
-      {error && <span className="invalid-feedback">{error}</span>}
+      {error && <span>{error}</span>}
     </Container>
   );
 };

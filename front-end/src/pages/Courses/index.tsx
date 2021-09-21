@@ -55,7 +55,9 @@ export default function Courses() {
 
               <hr />
 
-              <p>{course.instructor.name}</p>
+              <p>
+                Instrutor: <strong>{course.instructor.name}</strong>
+              </p>
 
               <Button
                 onClick={() => {

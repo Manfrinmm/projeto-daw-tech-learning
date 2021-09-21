@@ -47,6 +47,7 @@ const Select: React.FC<ISelectProps> = ({
           {...rest}
         >
           <option hidden>Selecione um instrutor</option>
+
           {optionValues.length < 1 && (
             <option disabled>
               Você não possui nenhum instrutor cadastrado

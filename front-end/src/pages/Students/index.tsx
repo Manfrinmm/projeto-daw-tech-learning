@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import Button from "../../components/Button";
 import api from "../../services/api";
@@ -13,22 +14,31 @@ interface IStudent {
 export default function Students() {
   const [students, setStudents] = useState<IStudent[]>([]);
 
+  const history = useHistory();
+
   useEffect(() => {
     api.get("/students").then(response => {
       setStudents(response.data.content);
     });
   }, []);
 
-  const handleOpenModal = useCallback(() => {
-    console.log("Abrir modal de edição");
-  }, []);
+  const handleEditStudent = useCallback(
+    (student_id: number) => {
+      history.push(`/students/student?student_id=${student_id}`);
+    },
+    [history],
+  );
+
+  const handleCreateStudent = useCallback(() => {
+    history.push("/students/student");
+  }, [history]);
 
   return (
     <Container>
       <header>
         <h1>Estudantes</h1>
 
-        <Button>Criar estudante</Button>
+        <Button onClick={handleCreateStudent}>Criar estudante</Button>
       </header>
 
       <section>
@@ -42,7 +52,13 @@ export default function Students() {
               <strong>{student.name}</strong>
               <p>{student.email}</p>
 
-              <Button onClick={handleOpenModal}>Editar</Button>
+              <Button
+                onClick={() => {
+                  handleEditStudent(student.id);
+                }}
+              >
+                Editar
+              </Button>
             </Student>
           ))}
         </ul>

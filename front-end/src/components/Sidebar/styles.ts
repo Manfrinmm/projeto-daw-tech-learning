@@ -11,8 +11,11 @@ export const Container = styled.aside`
   background: #082032;
 
   img {
-    height: 40px;
+    height: 88px;
     margin-bottom: 16px;
+    background: #2c394b;
+    border-radius: 8px;
+    padding: 4px;
   }
 
   ul {
